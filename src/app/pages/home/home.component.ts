@@ -80,29 +80,10 @@ export class HomeComponent {
   };
 
   updateTask(index: number) {
-        /*
-        this.tasks.update((tasks) => {
-          return tasks.map((task, position) => {
-            if (position === index) {
-              return {
-                ...task,
-                completed: !task.completed
-              }
-            }
-            return task;
-          })
-        });
-      } 
-       */
-        
     this.tasks.update((prevState: Task[]) => {
-      const currentTask = prevState[index];
-      prevState[index] = {
-        ...currentTask,
-        completed: !currentTask.completed
-      }
-      return prevState;
-    }) 
+      prevState[index].completed = !prevState[index].completed
+      return [...prevState];
+    });
   }
 
   updateTaskText(index: number) {
@@ -153,14 +134,19 @@ export class HomeComponent {
 
   deleteTask(index: number) {
     this.tasks.update((tasks: Task[]) => { 
-      // return tasks.splice(index, 1);
       tasks.splice(index, 1); // quitando el elemento y devolviendolo
-      return tasks; // estamos retornando la lista sin el elementos que quitamos
+      return [...tasks]; // estamos retornando la lista sin el elementos que quitamos
     });
   }
 
   changeFilter(filter: string) {
     this.filter.set(filter);
+  }
+
+  deleteAllTask() {
+    this.tasks.update((tasks: Task[]) => { 
+      return tasks.filter(task => !task.completed);
+    });
   }
 
 }
